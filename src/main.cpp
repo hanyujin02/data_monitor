@@ -2,6 +2,7 @@
 #include <sensor_msgs/BatteryState.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/TwistStamped.h>
+#include <geometry_msgs/Vector3.h>
 #include <data_monitor/BatteryPoseVel.h>
 
 class BatteryPoseVelNode
@@ -27,7 +28,7 @@ public:
             {
                 data_monitor::BatteryPoseVel msg;
                 msg.battery_percentage = battery_percentage_;
-                msg.pose = pose_;
+                msg.position = position_;
                 msg.velocity = velocity_;
                 pub_.publish(msg);
             }
@@ -43,8 +44,8 @@ private:
     ros::Publisher pub_;
 
     float battery_percentage_;
-    geometry_msgs::Pose pose_;
-    geometry_msgs::Twist velocity_;
+    geometry_msgs::Vector3 position_;
+    geometry_msgs::Vector3 velocity_;
 
     bool battery_ready_, pose_ready_, velocity_ready_;
 
@@ -56,15 +57,21 @@ private:
 
     void poseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
     {
-        pose_ = msg->pose;
+        position_.x = msg->pose.position.x;
+        position_.y = msg->pose.position.y;
+        position_.z = msg->pose.position.z;
         pose_ready_ = true;
     }
 
+
     void velocityCallback(const geometry_msgs::TwistStamped::ConstPtr& msg)
     {
-        velocity_ = msg->twist;
+        velocity_.x = msg->twist.linear.x;
+        velocity_.y = msg->twist.linear.y;
+        velocity_.z = msg->twist.linear.z;
         velocity_ready_ = true;
     }
+
 };
 
 int main(int argc, char** argv)

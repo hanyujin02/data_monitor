@@ -1,4 +1,4 @@
 float32 battery_percentage
-geometry_msgs/Pose pose
-geometry_msgs/Twist velocity
+geometry_msgs/Vector3 position
+geometry_msgs/Vector3 velocity
 
